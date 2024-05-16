@@ -28,7 +28,7 @@ bool hookStopped = false;
 bool hookReturning = false;
 int goldX = 500;
 int goldY = 300;
-bool goldReachedDestination = false; // Thêm biến cờ để kiểm tra khi gold.png đã đạt đến vị trí mong muốn
+bool goldReachedDestination = false;
 int diamondX = 350;
 int diamondY = 400;
 bool diamondReachedDestination = false;
@@ -40,7 +40,7 @@ int smallStoneY = 350;
 bool smallStoneReachedDestination = false;
 long long score = 0;
 long long goal = 3;
-const int INITIAL_TIME = 20; // Initial time in seconds
+const int INITIAL_TIME = 20;
 int remainingTime = INITIAL_TIME;
 
 bool init() {
@@ -74,7 +74,7 @@ bool init() {
         return false;
     }
 
-    font = TTF_OpenFont("VeraMoBd.ttf", 28); // Thay "your_font.ttf" bằng đường dẫn của font bạn muốn sử dụng
+    font = TTF_OpenFont("VeraMoBd.ttf", 28);
     if (font == nullptr) {
         std::cout << "Không thể tải font! Lỗi SDL_ttf: " << TTF_GetError() << std::endl;
         return false;
@@ -149,7 +149,6 @@ int hookCenterX = hookStartX;
 int hookCenterY = hookStartY;
 
 bool checkCollision() {
-    // Check for collision with an object at (500, 300) of size (50, 50)
     if (hookCenterX >= 500 && hookCenterX <= 550 && hookCenterY >= 300 && hookCenterY <= 350 && goldReachedDestination == false) {
         return true;
     }
@@ -165,7 +164,6 @@ bool checkCollision() {
     if (hookCenterX >= 600 && hookCenterX <= 650 && hookCenterY >= 350 && hookCenterY <= 400 && smallStoneReachedDestination == false) {
         return true;
     }
-    // Check for collision with screen edges
     if (hookCenterX < -25 || hookCenterX > SCREEN_WIDTH-50 || hookCenterY < -25 || hookCenterY > SCREEN_HEIGHT-50) {
         return true;
     }
@@ -178,7 +176,7 @@ void update() {
     auto currentTime = std::chrono::steady_clock::now();
     if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - lastTime).count() >= 1) {
         lastTime = currentTime;
-        remainingTime--; // Corrected decrement operation
+        remainingTime--;
     }
 
     if (!hookStopped && !hookReturning) {
@@ -228,120 +226,100 @@ void update() {
         }
     }
     if (hookCenterX >= goldX && hookCenterX <= goldX + 50 && hookCenterY >= goldY && hookCenterY <= goldY + 50) {
-        // Di chuyển gold.png về vị trí mong muốn (335, 150)
         int destinationX = 335;
         int destinationY = 150;
-        int speed = 1.25; // Tốc độ di chuyển của gold.png
+        int speed = 1.25;
 
-        // Xác định hướng di chuyển của gold.png
         int dx = destinationX - goldX;
         int dy = destinationY - goldY;
         float distance = sqrt(dx * dx + dy * dy);
 
-        // Tính toán vận tốc của gold.png
         float moveX = dx / distance * speed;
         float moveY = dy / distance * speed;
 
-        // Cập nhật vị trí của gold.png
         if (distance > speed) {
             goldX += moveX;
             goldY += moveY;
         } else {
-            // Nếu khoảng cách nhỏ hơn tốc độ, di chuyển gold.png đến vị trí đích cuối cùng
             goldX = destinationX;
             goldY = destinationY;
             if (!goldReachedDestination) {
-            score += 2; // Tăng điểm lên 1 đơn vị
-            goldReachedDestination = true; // Đánh dấu là gold.png đã đạt đến vị trí mong muốn
+            score += 2;
+            goldReachedDestination = true;
         }
         }
     }
 
-    // Di chuyển viên kim cương nếu chưa đạt đến vị trí mong muốn
     if (hookCenterX >= diamondX && hookCenterX <= diamondX + 50 && hookCenterY >= diamondY && hookCenterY <= diamondY + 50) {
-        int destinationX = 335; // Vị trí mong muốn của kim cương trên trục X
-        int destinationY = 150; // Vị trí mong muốn của kim cương trên trục Y
-        int speed = 1.25; // Tốc độ di chuyển của kim cương
+        int destinationX = 335;
+        int destinationY = 150;
+        int speed = 1.25;
 
-        // Xác định hướng di chuyển của kim cương
         int dx = destinationX - diamondX;
         int dy = destinationY - diamondY;
         float distance = sqrt(dx * dx + dy * dy);
 
-        // Tính toán vận tốc của kim cương
         float moveX = dx / distance * speed;
         float moveY = dy / distance * speed;
 
-        // Cập nhật vị trí của kim cương
         if (distance > speed) {
             diamondX += moveX;
             diamondY += moveY;
         } else {
-            // Nếu khoảng cách nhỏ hơn tốc độ, di chuyển kim cương đến vị trí đích cuối cùng
             diamondX = destinationX;
             diamondY = destinationY;
             if (!diamondReachedDestination) {
-            score += 3; // Tăng điểm lên 1 đơn vị
+            score += 3;
             diamondReachedDestination = true;
         }
         }
     }
 
-   // Di chuyển bigStone.png nếu chưa đạt đến vị trí mong muốn
     if (hookCenterX >= bigStoneX && hookCenterX <= bigStoneX + 50 && hookCenterY >= bigStoneY && hookCenterY <= bigStoneY + 50) {
-        int destinationX = 335; // Vị trí mong muốn của bigStone.png trên trục X
-        int destinationY = 150; // Vị trí mong muốn của bigStone.png trên trục Y
-        int speed = 1.25; // Tốc độ di chuyển của bigStone.png
+        int destinationX = 335;
+        int destinationY = 150;
+        int speed = 1.25;
 
-        // Xác định hướng di chuyển của bigStone.png
         int dx = destinationX - bigStoneX;
         int dy = destinationY - bigStoneY;
         float distance = sqrt(dx * dx + dy * dy);
 
-        // Tính toán vận tốc của bigStone.png
         float moveX = dx / distance * speed;
         float moveY = dy / distance * speed;
 
-        // Cập nhật vị trí của bigStone.png
         if (distance > speed) {
             bigStoneX += moveX;
             bigStoneY += moveY;
         } else {
-            // Nếu khoảng cách nhỏ hơn tốc độ, di chuyển bigStone.png đến vị trí đích cuối cùng
             bigStoneX = destinationX;
             bigStoneY = destinationY;
             if (!bigStoneReachedDestination) {
-            score ++; // Tăng điểm lên 1 đơn vị
+            score ++;
             bigStoneReachedDestination = true;
         }
         }
     }
 
-    // Di chuyển bigStone.png nếu chưa đạt đến vị trí mong muốn
     if (hookCenterX >= smallStoneX && hookCenterX <= smallStoneX + 50 && hookCenterY >= smallStoneY && hookCenterY <= smallStoneY + 50) {
-        int destinationX = 335; // Vị trí mong muốn của bigStone.png trên trục X
-        int destinationY = 150; // Vị trí mong muốn của bigStone.png trên trục Y
-        int speed = 1.25; // Tốc độ di chuyển của bigStone.png
+        int destinationX = 335;
+        int destinationY = 150;
+        int speed = 1.25;
 
-        // Xác định hướng di chuyển của bigStone.png
         int dx = destinationX - smallStoneX;
         int dy = destinationY - smallStoneY;
         float distance = sqrt(dx * dx + dy * dy);
 
-        // Tính toán vận tốc của bigStone.png
         float moveX = dx / distance * speed;
         float moveY = dy / distance * speed;
 
-        // Cập nhật vị trí của bigStone.png
         if (distance > speed) {
             smallStoneX += moveX;
             smallStoneY += moveY;
         } else {
-            // Nếu khoảng cách nhỏ hơn tốc độ, di chuyển bigStone.png đến vị trí đích cuối cùng
             smallStoneX = destinationX;
             smallStoneY = destinationY;
             if (!smallStoneReachedDestination) {
-            score++; // Tăng điểm lên 1 đơn vị
+            score++;
             smallStoneReachedDestination = true;
         }
         }
@@ -374,7 +352,6 @@ void drawGame() {
 
     SDL_RenderCopy(gRenderer, gGameBgTexture, nullptr, nullptr);
 
-    // Kiểm tra biến cờ goldReachedDestination để xác định xem có vẽ gold.png không
     if (!goldReachedDestination) {
         SDL_Texture* goldTexture = loadTexture("gold.png");
         if (goldTexture != nullptr) {
@@ -451,7 +428,7 @@ void drawGame() {
     std::string timeText = "Time: " + std::to_string(remainingTime);
     SDL_Surface* timeSurface = TTF_RenderText_Solid(font, timeText.c_str(), textColor);
     SDL_Texture* timeTexture = SDL_CreateTextureFromSurface(gRenderer, timeSurface);
-    SDL_Rect timeRect = {10, 90, timeSurface->w, timeSurface->h}; // Adjust position as needed
+    SDL_Rect timeRect = {10, 90, timeSurface->w, timeSurface->h};
     SDL_RenderCopy(gRenderer, timeTexture, nullptr, &timeRect);
     SDL_FreeSurface(timeSurface);
     SDL_DestroyTexture(timeTexture);
@@ -510,21 +487,19 @@ int main(int argc, char* argv[]) {
             update();
             drawGame();
         } else if (gState == WIN_GAME) {
-            drawGame(); // Vẽ lại màn hình
+            drawGame();
         }  else if (gState == LOSE_GAME) {
-            drawGame(); // Vẽ lại màn hình
+            drawGame();
         }
 
-        // Nếu trạng thái trò chơi là END_GAME, không cần cập nhật hoặc xử lý sự kiện nữa
         if (gState != WIN_GAME) {
-            // Kiểm tra điều kiện kết thúc trò chơi và thoát khỏi vòng lặp
             if (score == goal) {
                 gState = WIN_GAME;
             } else if(remainingTime == 0) {
                 gState = LOSE_GAME;
             }
         } else {
-            SDL_Delay(1000); // Đợi một giây trước khi thoát khỏi trò chơi
+            SDL_Delay(1000);
         }
     }
 
