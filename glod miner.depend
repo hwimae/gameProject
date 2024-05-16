@@ -1,6 +1,9 @@
 # depslib dependency file v1.0
-1714840246 source:d:\c++\ltnc\gold miner\glod miner\main.cpp
+1715857078 source:d:\c++\ltnc\gold miner\glod miner\main.cpp
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
+	<cmath>
+	<SDL_ttf.h>
+	<chrono>
 
